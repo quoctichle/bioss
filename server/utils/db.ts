@@ -1,5 +1,6 @@
 import { Signer } from '@aws-sdk/rds-signer';
-import { fromTokenFile } from '@aws-sdk/credential-provider-web-identity';
+import { fromNodeProviderChain } from '@aws-sdk/credential-providers';
+import { STSClient, AssumeRoleCommand } from '@aws-sdk/client-sts';
 import pg from 'pg';
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -12,37 +13,53 @@ export async function getClient() {
     return pool;
   }
 
-  // Ensure mapping of Vercel custom prefixed vars to standard AWS SDK vars
-  if (process.env.bio_AWS_ROLE_ARN) process.env.AWS_ROLE_ARN = process.env.bio_AWS_ROLE_ARN;
-  if (process.env.bio_AWS_WEB_IDENTITY_TOKEN_FILE) process.env.AWS_WEB_IDENTITY_TOKEN_FILE = process.env.bio_AWS_WEB_IDENTITY_TOKEN_FILE;
-  if (process.env.bio_AWS_REGION) process.env.AWS_REGION = process.env.bio_AWS_REGION;
-
   const region = process.env.bio_AWS_REGION || process.env.AWS_REGION || 'ap-northeast-1';
   const hostname = process.env.bio_PGHOST;
   const username = process.env.bio_PGUSER;
   const port = parseInt(process.env.bio_PGPORT || '5432', 10);
   const database = process.env.bio_PGDATABASE;
+  const roleArn = process.env.bio_AWS_ROLE_ARN;
 
   if (!hostname || !username || !database) {
     console.warn('DB connect: Missing connection credentials.');
   }
 
-  const roleArn = process.env.AWS_ROLE_ARN;
-  const webIdentityTokenFile = process.env.AWS_WEB_IDENTITY_TOKEN_FILE;
+  // Fetch base credentials provided by the Vercel AWS Lambda execution environment
+  const baseProvider = fromNodeProviderChain();
 
-  if (!roleArn || !webIdentityTokenFile) {
-      const debugKeys = Object.keys(process.env).filter(k => k.includes('AWS') || k.includes('PG') || k.includes('VERCEL')).join(', ');
-      throw new Error(`DEBUG_INFO: Token file not found. Available env vars: ${debugKeys}`);
-  }
+  // AWS SDK credentials wrapper that manually assumes the role Vercel registered
+  const provider = async () => {
+    try {
+      const baseCreds = await baseProvider();
+      
+      if (!roleArn) {
+        return baseCreds; // No role to assume, return base directly
+      }
 
-  // Force explicitly loading from Vercel's Web Token File
-  const provider = fromTokenFile({
-      roleArn,
-      webIdentityTokenFile,
-      roleSessionName: "VercelNuxtSession"
-  });
+      // Automatically assume the Vercel connection role using STS
+      const sts = new STSClient({ region, credentials: baseCreds });
+      const assumeCmd = new AssumeRoleCommand({
+        RoleArn: roleArn,
+        RoleSessionName: 'VercelAuroraSession',
+        DurationSeconds: 900
+      });
+      
+      const assumed = await sts.send(assumeCmd);
+      if (!assumed.Credentials) {
+         throw new Error("STS returned normal response but no credentials object.");
+      }
 
-  // Explicitly supply the credential provider to the Signer
+      return {
+        accessKeyId: assumed.Credentials.AccessKeyId!,
+        secretAccessKey: assumed.Credentials.SecretAccessKey!,
+        sessionToken: assumed.Credentials.SessionToken,
+        expiration: assumed.Credentials.Expiration
+      };
+    } catch (err: any) {
+      throw new Error(`DEBUG_INFO Provider/STS Error: ${err.message}`);
+    }
+  };
+
   signer = new Signer({
     hostname: hostname || 'localhost',
     port: port,
@@ -52,7 +69,6 @@ export async function getClient() {
   });
 
   try {
-    // Await the token immediately to catch any AWS IAM Auth/Signer exceptions
     const passwordToken = process.env.bio_PGPASSWORD || await signer.getAuthToken();
 
     pool = new pg.Pool({
