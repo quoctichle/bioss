@@ -3,10 +3,76 @@ import { fromNodeProviderChain } from '@aws-sdk/credential-providers';
 import { STSClient, AssumeRoleCommand } from '@aws-sdk/client-sts';
 import pg from 'pg';
 import * as dotenv from 'dotenv';
+import http from 'node:http';
+import https from 'node:https';
+import { URL } from 'node:url';
 dotenv.config();
 
 let pool: pg.Pool | undefined;
 let signer: Signer | undefined;
+
+interface AwsBaseCredentials {
+  accessKeyId: string;
+  secretAccessKey: string;
+  sessionToken?: string;
+  expiration?: string | Date;
+}
+
+async function fetchLambdaMetadataCredentials(): Promise<AwsBaseCredentials | null> {
+  const metadataEndpoint = process.env.AWS_LAMBDA_METADATA_API;
+  if (!metadataEndpoint) {
+    return null;
+  }
+
+  const normalizedUrl = normalizeMetadataUrl(metadataEndpoint);
+
+  const payload = await fetchJson(normalizedUrl);
+  if (!payload || !payload.AccessKeyId || !payload.SecretAccessKey) {
+    throw new Error('Lambda metadata response is missing credentials.');
+  }
+
+  return {
+    accessKeyId: payload.AccessKeyId,
+    secretAccessKey: payload.SecretAccessKey,
+    sessionToken: payload.Token,
+    expiration: payload.Expiration,
+  };
+}
+
+function normalizeMetadataUrl(raw: string): string {
+  const trimmed = raw.trim();
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed;
+  }
+
+  return `http://${trimmed.replace(/^\/+/, '')}`;
+}
+
+function fetchJson(url: string) {
+  return new Promise<any>((resolve, reject) => {
+    const parsed = new URL(url);
+    const lib = parsed.protocol === 'https:' ? https : http;
+    const req = lib.get(parsed, { headers: { Accept: 'application/json' } }, (res) => {
+      const { statusCode } = res;
+      if (!statusCode || statusCode < 200 || statusCode >= 300) {
+        res.resume();
+        return reject(new Error(`Lambda metadata returned status ${statusCode}`));
+      }
+
+      const chunks: Buffer[] = [];
+      res.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
+      res.on('end', () => {
+        try {
+          resolve(JSON.parse(Buffer.concat(chunks).toString('utf8')));
+        } catch (parseError) {
+          reject(parseError);
+        }
+      });
+    });
+
+    req.on('error', reject);
+  });
+}
 
 export async function getClient() {
   if (pool) {
@@ -24,9 +90,6 @@ export async function getClient() {
     console.warn('DB connect: Missing connection credentials.');
   }
 
-  // Fallback to provider chain if no explicit keys are provided.
-  // This helps when running locally with standard AWS credentials,
-  // or if Vercel actually injects a valid role session later.
   const baseProvider = fromNodeProviderChain();
 
   const provider = async () => {
@@ -43,34 +106,34 @@ export async function getClient() {
       };
     }
 
-    // Nếu không có key cứng, thì dùng provider mặc định dò dẫm trong môi trường.
+    let baseCreds: AwsBaseCredentials;
     try {
-      const baseCreds = await baseProvider();
-      
-      // Nếu có role ARN thì thử assume role
-      if (roleArn) {
-         const sts = new STSClient({ region, credentials: baseCreds });
-         const assumeCmd = new AssumeRoleCommand({
-           RoleArn: roleArn,
-           RoleSessionName: 'BiossVercelDB',
-           DurationSeconds: 900
-         });
-         
-         const assumed = await sts.send(assumeCmd);
-         if (assumed.Credentials) {
-            return {
-              accessKeyId: assumed.Credentials.AccessKeyId!,
-              secretAccessKey: assumed.Credentials.SecretAccessKey!,
-              sessionToken: assumed.Credentials.SessionToken,
-              expiration: assumed.Credentials.Expiration
-            };
-         }
-      }
-
-      return baseCreds;
-    } catch(err: any) {
-        throw new Error(`Credential Error: Need either bio_AWS_ACCESS_KEY_ID or valid IAM Provider/Role. Detail: ${err.message}`);
+      const metadataCreds = await fetchLambdaMetadataCredentials().catch(() => null);
+      baseCreds = metadataCreds ?? (await baseProvider());
+    } catch (err: any) {
+      throw new Error(`Credential Error: Need either bio_AWS_ACCESS_KEY_ID or valid IAM Provider/Role. Detail: ${err.message}`);
     }
+
+    if (roleArn) {
+      const sts = new STSClient({ region, credentials: baseCreds });
+      const assumeCmd = new AssumeRoleCommand({
+        RoleArn: roleArn,
+        RoleSessionName: 'BiossVercelDB',
+        DurationSeconds: 900
+      });
+
+      const assumed = await sts.send(assumeCmd);
+      if (assumed.Credentials) {
+        return {
+          accessKeyId: assumed.Credentials.AccessKeyId!,
+          secretAccessKey: assumed.Credentials.SecretAccessKey!,
+          sessionToken: assumed.Credentials.SessionToken,
+          expiration: assumed.Credentials.Expiration
+        };
+      }
+    }
+
+    return baseCreds;
   };
 
   signer = new Signer({
