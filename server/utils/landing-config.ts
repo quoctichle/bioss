@@ -3,9 +3,18 @@ import path from 'node:path';
 import { createError } from 'h3';
 
 import { createDefaultLandingConfig, normalizeLandingConfig, type LandingConfig } from '../../shared/landing';
+import { getMongoCollection } from './mongo';
 
 const dataDir = path.join(process.cwd(), 'server', 'data');
 const configPath = path.join(dataDir, 'landing-config.json');
+const mongoCollectionName = 'landing_config';
+const mongoDocumentId = 'landing-config';
+let useLocalFallback = false;
+
+interface LandingConfigDocument {
+  _id: string;
+  config: LandingConfig;
+}
 
 async function ensureConfigFile(): Promise<void> {
   await mkdir(dataDir, { recursive: true });
@@ -28,14 +37,64 @@ async function writeConfigFile(config: LandingConfig): Promise<void> {
   await writeFile(configPath, JSON.stringify(config, null, 2), 'utf8');
 }
 
+async function readFromMongo(): Promise<LandingConfig> {
+  const collection = await getMongoCollection<LandingConfigDocument>(mongoCollectionName);
+  const doc = await collection.findOne({ _id: mongoDocumentId });
+
+  if (doc && doc.config) {
+    return normalizeLandingConfig(doc.config);
+  }
+
+  const defaultConfig = createDefaultLandingConfig();
+  await collection.updateOne(
+    { _id: mongoDocumentId },
+    { $set: { config: defaultConfig } },
+    { upsert: true }
+  );
+
+  return normalizeLandingConfig(defaultConfig);
+}
+
+async function writeToMongo(config: LandingConfig): Promise<void> {
+  const collection = await getMongoCollection<LandingConfigDocument>(mongoCollectionName);
+  await collection.updateOne(
+    { _id: mongoDocumentId },
+    { $set: { config } },
+    { upsert: true }
+  );
+}
+
 export async function readLandingConfig(): Promise<LandingConfig> {
-  return readConfigFile();
+  if (useLocalFallback) {
+    return readConfigFile();
+  }
+
+  try {
+    return await readFromMongo();
+  } catch (error: any) {
+    console.error('MongoDB read failed:', error);
+    useLocalFallback = true;
+    return readConfigFile();
+  }
 }
 
 export async function writeLandingConfig(config: unknown): Promise<LandingConfig> {
   const normalized = normalizeLandingConfig(config);
-  await writeConfigFile(normalized);
-  return normalized;
+
+  if (useLocalFallback) {
+    await writeConfigFile(normalized);
+    return normalized;
+  }
+
+  try {
+    await writeToMongo(normalized);
+    return normalized;
+  } catch (error: any) {
+    console.error('MongoDB write failed:', error);
+    useLocalFallback = true;
+    await writeConfigFile(normalized);
+    return normalized;
+  }
 }
 
 const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
