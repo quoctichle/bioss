@@ -18,6 +18,9 @@ export async function getClient() {
   if (process.env.bio_AWS_REGION && !process.env.AWS_REGION) {
     process.env.AWS_REGION = process.env.bio_AWS_REGION;
   }
+  if (process.env.bio_AWS_WEB_IDENTITY_TOKEN_FILE && !process.env.AWS_WEB_IDENTITY_TOKEN_FILE) {
+    process.env.AWS_WEB_IDENTITY_TOKEN_FILE = process.env.bio_AWS_WEB_IDENTITY_TOKEN_FILE;
+  }
 
   const region = process.env.bio_AWS_REGION || process.env.AWS_REGION;
   const hostname = process.env.bio_PGHOST;
