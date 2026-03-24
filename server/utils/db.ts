@@ -24,21 +24,53 @@ export async function getClient() {
     console.warn('DB connect: Missing connection credentials.');
   }
 
-  // Lấy credentials trực tiếp từ biến môi trường của Vercel
-  const accessKeyId = process.env.bio_AWS_ACCESS_KEY_ID;
-  const secretAccessKey = process.env.bio_AWS_SECRET_ACCESS_KEY;
-  const sessionToken = process.env.bio_AWS_SESSION_TOKEN; // Có thể có hoặc không
+  // Fallback to provider chain if no explicit keys are provided.
+  // This helps when running locally with standard AWS credentials,
+  // or if Vercel actually injects a valid role session later.
+  const baseProvider = fromNodeProviderChain();
 
   const provider = async () => {
-    if (!accessKeyId || !secretAccessKey) {
-       throw new Error("Missing bio_AWS_ACCESS_KEY_ID or bio_AWS_SECRET_ACCESS_KEY in env");
-    }
+    // Nếu có biến do mình tự thêm (như bạn tạo IAM User)
+    const accessKeyId = process.env.bio_AWS_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY_ID;
+    const secretAccessKey = process.env.bio_AWS_SECRET_ACCESS_KEY || process.env.AWS_SECRET_ACCESS_KEY;
+    const sessionToken = process.env.bio_AWS_SESSION_TOKEN || process.env.AWS_SESSION_TOKEN;
     
-    return {
-      accessKeyId,
-      secretAccessKey,
-      sessionToken
-    };
+    if (accessKeyId && secretAccessKey) {
+      return {
+        accessKeyId,
+        secretAccessKey,
+        sessionToken
+      };
+    }
+
+    // Nếu không có key cứng, thì dùng provider mặc định dò dẫm trong môi trường.
+    try {
+      const baseCreds = await baseProvider();
+      
+      // Nếu có role ARN thì thử assume role
+      if (roleArn) {
+         const sts = new STSClient({ region, credentials: baseCreds });
+         const assumeCmd = new AssumeRoleCommand({
+           RoleArn: roleArn,
+           RoleSessionName: 'BiossVercelDB',
+           DurationSeconds: 900
+         });
+         
+         const assumed = await sts.send(assumeCmd);
+         if (assumed.Credentials) {
+            return {
+              accessKeyId: assumed.Credentials.AccessKeyId!,
+              secretAccessKey: assumed.Credentials.SecretAccessKey!,
+              sessionToken: assumed.Credentials.SessionToken,
+              expiration: assumed.Credentials.Expiration
+            };
+         }
+      }
+
+      return baseCreds;
+    } catch(err: any) {
+        throw new Error(`Credential Error: Need either bio_AWS_ACCESS_KEY_ID or valid IAM Provider/Role. Detail: ${err.message}`);
+    }
   };
 
   signer = new Signer({
