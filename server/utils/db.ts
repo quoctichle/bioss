@@ -31,7 +31,8 @@ export async function getClient() {
   const webIdentityTokenFile = process.env.AWS_WEB_IDENTITY_TOKEN_FILE;
 
   if (!roleArn || !webIdentityTokenFile) {
-      throw new Error(`Missing Vercel injected credentials. AWS_ROLE_ARN=${!!roleArn}, AWS_WEB_IDENTITY_TOKEN_FILE=${!!webIdentityTokenFile}`);
+      const debugKeys = Object.keys(process.env).filter(k => k.includes('AWS') || k.includes('PG') || k.includes('VERCEL')).join(', ');
+      throw new Error(`DEBUG_INFO: Token file not found. Available env vars: ${debugKeys}`);
   }
 
   // Force explicitly loading from Vercel's Web Token File
