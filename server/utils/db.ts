@@ -3,6 +3,19 @@ import pg from 'pg';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+// Vercel Integration thÆ°á»ng cáº¥p biáº¿n mÃ´i trÆ°á»ng cÃ³ prefix (vd: bio_AWS_ROLE_ARN)
+// NhÆ°ng AWS SDK standard chá»‰ tá»± Ä‘á»™ng nháº­n biáº¿n khÃ´ng cÃ³ prefix.
+// Do Ä‘Ã³, ta cáº§n map mapping chÃºng trÆ°á»›c khi khá»Ÿi táº¡o kÃ¿.
+if (process.env.bio_AWS_ROLE_ARN && !process.env.AWS_ROLE_ARN) {
+  process.env.AWS_ROLE_ARN = process.env.bio_AWS_ROLE_ARN;
+}
+if (process.env.bio_AWS_REGION && !process.env.AWS_REGION) {
+  process.env.AWS_REGION = process.env.bio_AWS_REGION;
+}
+if (process.env.bio_AWS_WEB_IDENTITY_TOKEN_FILE && !process.env.AWS_WEB_IDENTITY_TOKEN_FILE) {
+  process.env.AWS_WEB_IDENTITY_TOKEN_FILE = process.env.bio_AWS_WEB_IDENTITY_TOKEN_FILE;
+}
+
 let pool: pg.Pool | undefined;
 let signer: Signer | undefined;
 

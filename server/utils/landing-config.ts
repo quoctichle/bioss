@@ -8,7 +8,7 @@ const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
 const dataDir = path.join(process.cwd(), 'server', 'data');
 const configPath = path.join(dataDir, 'landing-config.json');
 
-// Biến lưu trạng thái fallback để tránh spam kết nối lỗi nhiều lần dưới local
+// Fallback is only used in Local. On Vercel, it throws errors logically.
 let useLocalFallback = false;
 
 async function ensureConfigFile() {
@@ -22,8 +22,8 @@ async function ensureConfigFile() {
 
 export async function readLandingConfig(): Promise<LandingConfig> {
   try {
-    if (useLocalFallback) throw new Error('Local fallback active');
-    
+    if (useLocalFallback && !process.env.VERCEL) throw new Error('Local fallback active');
+
     await initDb();
     const client = await getClient();
     const queryResult = await client.query('SELECT config FROM site_config WHERE id = 1');
@@ -36,12 +36,17 @@ export async function readLandingConfig(): Promise<LandingConfig> {
 
     return normalizeLandingConfig(queryResult.rows[0].config);
   } catch (error: any) {
+    if (process.env.VERCEL) {
+      console.error('DB Error on Vercel [read]:', error);
+      // Return default instead of crashing the site
+      return normalizeLandingConfig(createDefaultLandingConfig());
+    }
+
     if (!useLocalFallback) {
       console.warn('DB connection failed, falling back to local JSON.', error?.message || '');
       useLocalFallback = true;
     }
-    
-    // Đọc từ file JSON nếu DB lỗi hoặc đang ở dưới máy tính cá nhân
+
     await ensureConfigFile();
     const raw = await readFile(configPath, 'utf8');
     return normalizeLandingConfig(JSON.parse(raw));
@@ -52,7 +57,7 @@ export async function writeLandingConfig(config: unknown): Promise<LandingConfig
   const normalized = normalizeLandingConfig(config);
 
   try {
-    if (useLocalFallback) throw new Error('Local fallback active');
+    if (useLocalFallback && !process.env.VERCEL) throw new Error('Local fallback active');
 
     await initDb();
     const client = await getClient();
@@ -63,8 +68,12 @@ export async function writeLandingConfig(config: unknown): Promise<LandingConfig
     } else {
       await client.query('UPDATE site_config SET config = $1 WHERE id = 1', [normalized]);
     }
-  } catch (error) {
-    // Lưu vào file JSON nếu đang ở Local
+  } catch (error: any) {
+    console.error('DB Error on writeLandingConfig:', error);
+    if (process.env.VERCEL) {
+      throw createError({ statusCode: 500, statusMessage: 'Vercel DB Error: ' + (error.message || 'Unknown') });
+    }
+    
     useLocalFallback = true;
     await ensureConfigFile();
     await writeFile(configPath, JSON.stringify(normalized, null, 2), 'utf8');
@@ -74,39 +83,31 @@ export async function writeLandingConfig(config: unknown): Promise<LandingConfig
 }
 
 function extensionFromMime(mimeType: string): string {
-  if (mimeType === 'image/jpeg') {
-    return 'jpg';
-  }
-
-  if (mimeType === 'image/svg+xml') {
-    return 'svg';
-  }
-
-  if (mimeType === 'image/png' || mimeType === 'image/webp') {
-    return mimeType.split('/')[1];
-  }
-
-  throw createError({ statusCode: 400, statusMessage: 'Định dạng logo/icon không được hỗ trợ.' });
+  if (mimeType === 'image/jpeg') return 'jpg';
+  if (mimeType === 'image/svg+xml') return 'svg';
+  if (mimeType === 'image/png' || mimeType === 'image/webp') return mimeType.split('/')[1];
+  throw createError({ statusCode: 400, statusMessage: 'Invalid logo format.' });
 }
 
 function toPublicFilePath(fileUrl: string): string | null {
-  if (!fileUrl.startsWith('/uploads/')) {
-    return null;
-  }
-
+  if (!fileUrl.startsWith('/uploads/')) return null;
   const safeName = path.basename(fileUrl);
   return path.join(uploadsDir, safeName);
 }
 
 export async function saveLogoDataUrl(dataUrl: unknown, previousLogoUrl?: string): Promise<string> {
   if (typeof dataUrl !== 'string') {
-    throw createError({ statusCode: 400, statusMessage: 'Dữ liệu logo không hợp lệ.' });
+    throw createError({ statusCode: 400, statusMessage: 'Invalid data.' });
   }
 
   const match = dataUrl.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/);
-
   if (!match) {
-    throw createError({ statusCode: 400, statusMessage: 'Logo phải là ảnh PNG, JPG, WEBP hoặc SVG.' });
+    throw createError({ statusCode: 400, statusMessage: 'Logo must be PNG, JPG, WEBP, or SVG base64.' });
+  }
+
+  // ON VERCEL: Return base64 URL directly, DO NOT write to disk (read-only system)
+  if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
+    return dataUrl as string;
   }
 
   const mimeType = match[1];
@@ -115,17 +116,15 @@ export async function saveLogoDataUrl(dataUrl: unknown, previousLogoUrl?: string
   const buffer = Buffer.from(base64, 'base64');
 
   if (buffer.byteLength > 4 * 1024 * 1024) {
-    throw createError({ statusCode: 413, statusMessage: 'Logo vượt quá giới hạn 4MB.' });
+    throw createError({ statusCode: 413, statusMessage: 'Logo exceeds 4MB.' });
   }
 
   await mkdir(uploadsDir, { recursive: true });
-
   const fileName = `logo-${Date.now()}.${extension}`;
   const filePath = path.join(uploadsDir, fileName);
   await writeFile(filePath, buffer);
 
   const previousFile = previousLogoUrl ? toPublicFilePath(previousLogoUrl) : null;
-
   if (previousFile && previousFile !== filePath) {
     await rm(previousFile, { force: true }).catch(() => undefined);
   }
@@ -135,13 +134,17 @@ export async function saveLogoDataUrl(dataUrl: unknown, previousLogoUrl?: string
 
 export async function saveFlagDataUrl(dataUrl: unknown, previousFileUrl?: string): Promise<string> {
   if (typeof dataUrl !== 'string') {
-    throw createError({ statusCode: 400, statusMessage: 'Dữ liệu cờ không hợp lệ.' });
+    throw createError({ statusCode: 400, statusMessage: 'Invalid data.' });
   }
 
   const match = dataUrl.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/);
-
   if (!match) {
-    throw createError({ statusCode: 400, statusMessage: 'Cờ phải là ảnh PNG, JPG, WEBP hoặc SVG.' });
+    throw createError({ statusCode: 400, statusMessage: 'Flag must be PNG, JPG, WEBP or SVG base64.' });
+  }
+
+  // ON VERCEL: Return base64 URL directly
+  if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
+    return dataUrl as string;
   }
 
   const mimeType = match[1];
@@ -149,18 +152,16 @@ export async function saveFlagDataUrl(dataUrl: unknown, previousFileUrl?: string
   const extension = extensionFromMime(mimeType);
   const buffer = Buffer.from(base64, 'base64');
 
-  if (buffer.byteLength > 2 * 1024 * 1024) {
-    throw createError({ statusCode: 413, statusMessage: 'Cờ vượt quá giới hạn 2MB.' });
+  if (buffer.byteLength > 4 * 1024 * 1024) {
+    throw createError({ statusCode: 413, statusMessage: 'Flag exceeds 4MB.' });
   }
 
   await mkdir(uploadsDir, { recursive: true });
-
   const fileName = `flag-${Date.now()}.${extension}`;
   const filePath = path.join(uploadsDir, fileName);
   await writeFile(filePath, buffer);
 
   const previousFile = previousFileUrl ? toPublicFilePath(previousFileUrl) : null;
-
   if (previousFile && previousFile !== filePath) {
     await rm(previousFile, { force: true }).catch(() => undefined);
   }
