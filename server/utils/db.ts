@@ -1,5 +1,7 @@
 import { Signer } from '@aws-sdk/rds-signer';
 import pg from 'pg';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 let pool: pg.Pool | undefined;
 let signer: Signer | undefined;
