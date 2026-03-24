@@ -450,6 +450,18 @@ const particlesInit = async (engine: any) => {
   color: #0b462f;
 }
 
+.language-option:hover,
+.language-option:focus-visible {
+  background: rgba(34, 197, 94, 0.08);
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.language-option--active {
+  background: rgba(34, 197, 94, 0.18);
+  border-color: rgba(34, 197, 94, 0.5);
+  color: #0b462f;
+}
+
 
 
 .brand-block,
@@ -472,6 +484,31 @@ const particlesInit = async (engine: any) => {
   height: 80px;
   display: grid;
   place-items: center;
+}
+
+@media (max-width: 520px) {
+  .landing-card {
+    width: calc(100% - 24px);
+    padding: 18px 16px 24px;
+  }
+
+  .language-switcher {
+    right: 50%;
+    top: 8px;
+    transform: translateX(50%);
+    align-items: center;
+  }
+
+  .language-toggle {
+    padding: 8px 14px;
+  }
+
+  .language-dropdown {
+    width: min(220px, calc(100vw - 32px));
+    right: 50%;
+    left: auto;
+    transform: translateX(50%);
+  }
 }
 
 .brand-logo--image img {
