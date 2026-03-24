@@ -1,0 +1,104 @@
+{
+  "logoUrl": "/uploads/logo-1774257525679.png",
+  "greenTitle": "HỆ SINH THÁI SUNSHINE",
+  "orangeSubtitle": "SUNSHINE ECOSYSTEM",
+  "links": [
+    {
+      "id": "mn2z3597-ymp7q6",
+      "label": "TikTok Shop | Order Now",
+      "url": "https://www.tiktok.com",
+      "icon": "/uploads/flag-1774321205745.png",
+      "tone": "green",
+      "flag1": "",
+      "flag2": ""
+    },
+    {
+      "id": "mn2z3597-kdlt2e",
+      "label": "VN | Vietnamese Support",
+      "url": "#",
+      "icon": "/uploads/flag-1774322009504.png",
+      "tone": "green",
+      "flag1": "/uploads/flag-1774319268205.png",
+      "flag2": "/uploads/flag-1774319216641.png"
+    },
+    {
+      "id": "mn2z3597-hhso0f",
+      "label": "MM | Myanmar Support",
+      "url": "#",
+      "icon": "/uploads/flag-1774322036142.png",
+      "tone": "green",
+      "flag1": "/uploads/flag-1774322032120.png",
+      "flag2": ""
+    },
+    {
+      "id": "mn2z3597-puoqol",
+      "label": "Ecosystem | Sunshine Global",
+      "url": "#",
+      "icon": "/uploads/flag-1774322132237.png",
+      "tone": "green",
+      "flag1": "",
+      "flag2": ""
+    },
+    {
+      "id": "mn2z3597-vvcg51",
+      "label": "Official Website",
+      "url": "#",
+      "icon": "/uploads/flag-1774322198955.png",
+      "tone": "green",
+      "flag1": "",
+      "flag2": ""
+    }
+  ],
+  "translations": {
+    "ja": {
+      "greenTitle": "サンシャインエコシステム",
+      "orangeSubtitle": "SUNSHINE ECOSYSTEM",
+      "linkLabels": {
+        "mn2z3597-ymp7q6": "TikTok Shop | Order Now",
+        "mn2z3597-kdlt2e": "VN | Vietnamese Support",
+        "mn2z3597-hhso0f": "MM | Myanmar Support",
+        "mn2z3597-puoqol": "Ecosystem | Sunshine Global",
+        "mn2z3597-vvcg51": "Official Website"
+      }
+    },
+    "vi": {
+      "greenTitle": "HỆ SINH THÁI SUNSHINE",
+      "orangeSubtitle": "SUNSHINE ECOSYSTEM",
+      "linkLabels": {
+        "mn2z3597-ymp7q6": "TikTok Shop | Order Now",
+        "mn2z3597-kdlt2e": "VN | Vietnamese Support",
+        "mn2z3597-hhso0f": "MM | Myanmar Support",
+        "mn2z3597-puoqol": "Ecosystem | Sunshine Global",
+        "mn2z3597-vvcg51": "Official Website"
+      }
+    },
+    "en": {
+      "greenTitle": "SUNSHINE ECOSYSTEM",
+      "orangeSubtitle": "SUNSHINE ECOSYSTEM",
+      "linkLabels": {
+        "mn2z3597-ymp7q6": "TikTok Shop | Order Now",
+        "mn2z3597-kdlt2e": "VN | Vietnamese Support",
+        "mn2z3597-hhso0f": "MM | Myanmar Support",
+        "mn2z3597-puoqol": "Ecosystem | Sunshine Global",
+        "mn2z3597-vvcg51": "Official Website"
+      }
+    },
+    "mm": {
+      "greenTitle": "SUNSHINE လောက",
+      "orangeSubtitle": "SUNSHINE ECOSYSTEM",
+      "linkLabels": {
+        "mn2z3597-ymp7q6": "TikTok Shop | Order Now",
+        "mn2z3597-kdlt2e": "VN | Vietnamese Support",
+        "mn2z3597-hhso0f": "MM | Myanmar Support",
+        "mn2z3597-puoqol": "Ecosystem | Sunshine Global",
+        "mn2z3597-vvcg51": "Official Website"
+      }
+    }
+  },
+  "languageFlags": {
+    "ja": "/uploads/flag-1774325194368.png",
+    "vi": "/uploads/flag-1774325152274.png",
+    "en": "/uploads/flag-1774325162007.png",
+    "mm": "/uploads/flag-1774325166682.png"
+  }
+}
