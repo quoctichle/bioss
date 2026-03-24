@@ -6,7 +6,7 @@
     {
       "id": "mn2z3597-ymp7q6",
       "label": "TikTok Shop | Order Now",
-      "url": "https://www.tiktok.com",
+      "url": "https://vt.tiktok.com/ZSu79d6Qa/?page=TikTokShop",
       "icon": "/uploads/flag-1774321205745.png",
       "tone": "green",
       "flag1": "",
@@ -15,34 +15,43 @@
     {
       "id": "mn2z3597-kdlt2e",
       "label": "VN | Vietnamese Support",
-      "url": "#",
+      "url": "https://m.me/SUNSHINE.HOME.PAGE",
       "icon": "/uploads/flag-1774322009504.png",
       "tone": "green",
       "flag1": "/uploads/flag-1774319268205.png",
-      "flag2": "/uploads/flag-1774319216641.png"
+      "flag2": ""
     },
     {
       "id": "mn2z3597-hhso0f",
+      "label": "EN | English Support",
+      "url": "https://m.me/SUNSHINE.HOME.PAGE",
+      "icon": "/uploads/flag-1774322036142.png",
+      "tone": "green",
+      "flag1": "/uploads/flag-1774319216641.png",
+      "flag2": ""
+    },
+    {
+      "id": "mn2z3597-puoqol",
       "label": "MM | Myanmar Support",
-      "url": "#",
+      "url": "https://m.me/ssmyanmartelecom",
       "icon": "/uploads/flag-1774322036142.png",
       "tone": "green",
       "flag1": "/uploads/flag-1774322032120.png",
       "flag2": ""
     },
     {
-      "id": "mn2z3597-puoqol",
+      "id": "mn2z3597-vvcg51",
       "label": "Ecosystem | Sunshine Global",
-      "url": "#",
+      "url": "https://www.facebook.com/sunshineglobal.vn",
       "icon": "/uploads/flag-1774322132237.png",
       "tone": "green",
       "flag1": "",
       "flag2": ""
     },
     {
-      "id": "mn2z3597-vvcg51",
+      "id": "mn4am5se-387es2",
       "label": "Official Website",
-      "url": "#",
+      "url": "https://sunshine-telecom.net/",
       "icon": "/uploads/flag-1774322198955.png",
       "tone": "green",
       "flag1": "",
@@ -54,44 +63,48 @@
       "greenTitle": "サンシャインエコシステム",
       "orangeSubtitle": "SUNSHINE ECOSYSTEM",
       "linkLabels": {
-        "mn2z3597-ymp7q6": "TikTok Shop | Order Now",
-        "mn2z3597-kdlt2e": "VN | Vietnamese Support",
-        "mn2z3597-hhso0f": "MM | Myanmar Support",
-        "mn2z3597-puoqol": "Ecosystem | Sunshine Global",
-        "mn2z3597-vvcg51": "Official Website"
+        "mn2z3597-ymp7q6": "TikTok Shop｜今すぐ注文",
+        "mn2z3597-kdlt2e": "VN｜ベトナム語サポート",
+        "mn2z3597-hhso0f": "EN｜英語サポート",
+        "mn2z3597-puoqol": "MM｜ミャンマー語サポート",
+        "mn2z3597-vvcg51": "エコシステム｜Sunshine Global",
+        "mn4am5se-387es2": "公式ウェブサイト"
       }
     },
     "vi": {
       "greenTitle": "HỆ SINH THÁI SUNSHINE",
-      "orangeSubtitle": "SUNSHINE ECOSYSTEM",
+      "orangeSubtitle": "サンシャインエコシステム",
       "linkLabels": {
-        "mn2z3597-ymp7q6": "TikTok Shop | Order Now",
-        "mn2z3597-kdlt2e": "VN | Vietnamese Support",
-        "mn2z3597-hhso0f": "MM | Myanmar Support",
-        "mn2z3597-puoqol": "Ecosystem | Sunshine Global",
-        "mn2z3597-vvcg51": "Official Website"
+        "mn2z3597-ymp7q6": "TikTok Shop | Mua ngay",
+        "mn2z3597-kdlt2e": "VN | Hỗ Trợ Tiếng Việt",
+        "mn2z3597-hhso0f": "EN | Hỗ Trợ Tiếng anh",
+        "mn2z3597-puoqol": "MM | Hỗ Trợ Tiếng Myanma",
+        "mn2z3597-vvcg51": "Hệ sinh thái | Sunshine Global",
+        "mn4am5se-387es2": "Website chính thức"
       }
     },
     "en": {
       "greenTitle": "SUNSHINE ECOSYSTEM",
-      "orangeSubtitle": "SUNSHINE ECOSYSTEM",
+      "orangeSubtitle": "サンシャインエコシステム",
       "linkLabels": {
         "mn2z3597-ymp7q6": "TikTok Shop | Order Now",
         "mn2z3597-kdlt2e": "VN | Vietnamese Support",
-        "mn2z3597-hhso0f": "MM | Myanmar Support",
-        "mn2z3597-puoqol": "Ecosystem | Sunshine Global",
-        "mn2z3597-vvcg51": "Official Website"
+        "mn2z3597-hhso0f": "EN | English Support",
+        "mn2z3597-puoqol": "MM | Myanmar Support",
+        "mn2z3597-vvcg51": "Ecosystem | Sunshine Global",
+        "mn4am5se-387es2": "Official Website"
       }
     },
     "mm": {
       "greenTitle": "SUNSHINE လောက",
-      "orangeSubtitle": "SUNSHINE ECOSYSTEM",
+      "orangeSubtitle": "サンシャインエコシステム",
       "linkLabels": {
-        "mn2z3597-ymp7q6": "TikTok Shop | Order Now",
-        "mn2z3597-kdlt2e": "VN | Vietnamese Support",
-        "mn2z3597-hhso0f": "MM | Myanmar Support",
-        "mn2z3597-puoqol": "Ecosystem | Sunshine Global",
-        "mn2z3597-vvcg51": "Official Website"
+        "mn2z3597-ymp7q6": "TikTok Shop | ယခုပင်မှာယူပါ",
+        "mn2z3597-kdlt2e": "VN | ဗီယက်နမ်ဘာသာ အထောက်အပံ့",
+        "mn2z3597-hhso0f": "EN | အင်္ဂလိပ်ဘာသာ အထောက်အပံ့",
+        "mn2z3597-puoqol": "MM | မြန်မာဘာသာ အထောက်အပံ့",
+        "mn2z3597-vvcg51": "ဂေဟစနစ် | Sunshine Global",
+        "mn4am5se-387es2": "တရားဝင် ဝဘ်ဆိုဒ်"
       }
     }
   },

@@ -69,10 +69,10 @@ const particlesOptionsPage = ref<ISourceOptions>({
   fpsLimit: 120,
   particles: {
     color: {
-      value: '#ffffff',
+      value: '#ffeebb',
     },
     links: {
-      color: '#ffffff',
+      color: '#ffd085',
       distance: 150,
       enable: true,
       opacity: 0.35,
@@ -114,10 +114,10 @@ const particlesOptionsCard = ref<ISourceOptions>({
   fpsLimit: 120,
   particles: {
     color: {
-      value: '#ffffff',
+      value: '#ffeebb',
     },
     links: {
-      color: '#ffffff',
+      color: '#ffd085',
       distance: 120,
       enable: true,
       opacity: 0.25,
@@ -160,14 +160,14 @@ const particlesInit = async (engine: any) => {
         :options="particlesOptionsPage"
       />
     </ClientOnly>
-    <div class="landing-backdrop landing-backdrop--top"></div>
-    <div class="landing-backdrop landing-backdrop--bottom"></div>
-    <div class="landing-mesh landing-mesh--top"></div>
-    <div class="landing-mesh landing-mesh--bottom"></div>
-    <div class="landing-orb landing-orb--left"></div>
-    <div class="landing-orb landing-orb--right"></div>
+    
+    
+    
+    
+    
+    
 
-    <section class="landing-card">
+    <div class="top-nav">
       <div class="language-switcher">
         <button
           type="button"
@@ -184,25 +184,29 @@ const particlesInit = async (engine: any) => {
           <span class="language-chevron" aria-hidden="true">▾</span>
         </button>
         <div v-if="languageMenuOpen" class="language-dropdown" role="menu">
-            <button
-              v-for="language in languageMenu"
-              :key="language.code"
-              type="button"
-              class="language-option"
-              :class="{ 'language-option--active': language.code === currentLanguage }"
-              @click="changeLanguage(language.code)"
-              :aria-label="language.label"
-            >
-                <span class="language-flag">
-                  <img v-if="isUploadedLanguageFlag(getLanguageFlag(language.code))" :src="getLanguageFlag(language.code)" alt="" />
-                  <span v-else>{{ getLanguageFlag(language.code) }}</span>
-                </span>
-              <span class="language-label">{{ language.label }}</span>
-            </button>
+          <button
+            v-for="language in languageMenu"
+            :key="language.code"
+            type="button"
+            class="language-option"
+            :class="{ 'language-option--active': language.code === currentLanguage }"
+            @click="changeLanguage(language.code)"
+            :aria-label="language.label"
+          >
+            <span class="language-flag">
+              <img v-if="isUploadedLanguageFlag(getLanguageFlag(language.code))" :src="getLanguageFlag(language.code)" alt="" />
+              <span v-else>{{ getLanguageFlag(language.code) }}</span>
+            </span>
+            <span class="language-label">{{ language.label }}</span>
+          </button>
         </div>
       </div>
-      <div class="brand-block">
-        <div v-if="config.logoUrl" class="brand-logo brand-logo--image">
+    </div>
+
+    <section class="landing-card">
+      <div class="hero-header">
+        <div class="brand-block">
+          <div v-if="config.logoUrl" class="brand-logo brand-logo--image">
           <img :src="config.logoUrl" alt="Sunshine logo" />
         </div>
         <div v-else class="brand-logo brand-logo--fallback" aria-hidden="true">
@@ -213,6 +217,7 @@ const particlesInit = async (engine: any) => {
 
         <h1 class="brand-title">{{ heroTitle }}</h1>
         <p class="brand-subtitle">{{ heroSubtitle }}</p>
+        </div>
       </div>
 
       <div class="divider"></div>
@@ -277,23 +282,76 @@ const particlesInit = async (engine: any) => {
 :global(body) {
   margin: 0;
   font-family: var(--app-font-family);
-  background: radial-gradient(circle at 50% 50%, #ffffff 0%, #f4faeb 30%, #d1f0d3 60%, #9dd6a5 85%, #6eb47d 100%);
+  background: 
+    radial-gradient(circle at 50% 45%, #ffffff 0%, rgba(255,255,255,0.8) 25%, rgba(255,255,255,0) 65%),
+    linear-gradient(180deg, #ffd88a 0%, #8bc49c 50%, #2f6b43 100%);
   background-attachment: fixed;
-  color: #244234;
+  color: #13462b;
 }
 
 .landing-page {
   min-height: 100vh;
   min-height: 100dvh;
   box-sizing: border-box;
-  padding: 16px;
+  padding-block: clamp(12px, 2.5vw, 32px);
+  padding-inline: clamp(12px, 3vw, 24px);
   position: relative;
   overflow: hidden;
-  display: grid;
+  display: flex;
+  justify-content: center;
   align-items: center;
 }
 
+.top-nav {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 100;
+}
+
+.landing-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 50% 50%, transparent 30%, rgba(60, 35, 10, 0.4) 150%),
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.04), rgba(0,0,0,0.04) 1px, transparent 1px, transparent 3px);
+  pointer-events: none;
+  z-index: 90;
+  mix-blend-mode: multiply;
+  animation: vintageFlicker 8s infinite;
+}
+
 .landing-page::after {
+  content: '';
+  position: absolute;
+  inset: -100% -100%;
+  background-image: url('https://www.transparenttextures.com/patterns/dust.png');
+  opacity: 0.85;
+  mix-blend-mode: color-dodge;
+  pointer-events: none;
+  z-index: -3;
+  animation: dustDrift 40s linear infinite;
+}
+
+.landing-card {
+  width: min(100%, 460px);
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+  background: rgba(255, 248, 235, 0.25);
+  backdrop-filter: blur(12px) sepia(25%);
+  -webkit-backdrop-filter: blur(12px) sepia(25%);
+  border-radius: 36px;
+  box-shadow: 0 10px 40px rgba(80, 50, 20, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.landing-card::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -301,27 +359,28 @@ const particlesInit = async (engine: any) => {
   opacity: 0.6;
   mix-blend-mode: color-dodge;
   pointer-events: none;
-  z-index: -3;
-}
-
-.landing-backdrop {
-  position: absolute;
-  inset: auto;
-  pointer-events: none;
-  opacity: 0.5;
-  filter: blur(4px);
-  z-index: -2;
-}
-
-.landing-mesh {
-  position: absolute;
-  pointer-events: none;
-  opacity: 0.55;
-  mix-blend-mode: multiply;
-  filter: blur(0.4px);
+  border-radius: 36px;
   z-index: -1;
 }
 
+.hero-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.language-switcher {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+}
 .landing-orb {
   position: absolute;
   width: 140px;
@@ -333,37 +392,20 @@ const particlesInit = async (engine: any) => {
   z-index: -1;
 }
 
-.landing-card {
-  width: min(100%, 460px);
-  margin: 0 auto;
-  color: #f0fdf4;
-  padding: 24px 20px;
-  position: relative;
-  z-index: 1;
-}
-
-.language-switcher {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  z-index: 2;
-}
-
-
 .language-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 16px;
+  gap: 8px;
+  padding: 8px 14px;
   border-radius: 999px;
-  border: none;
-  background: rgba(255, 255, 255, 0.4);
-  color: #0f3323;
-  font-weight: 700;
-  font-size: 0.95rem;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  color: #1a5c36;
+  font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
@@ -412,16 +454,21 @@ const particlesInit = async (engine: any) => {
 }
 
 .language-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
   margin-top: 8px;
   width: 220px;
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(244, 250, 235, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: 18px;
   padding: 6px;
   display: flex;
   flex-direction: column;
   gap: 6px;
-  box-shadow: 0 18px 34px rgba(27, 52, 45, 0.26);
-  border: 1px solid rgba(15, 55, 39, 0.15);
+  box-shadow: 0 18px 34px rgba(27, 52, 45, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 .language-option {
@@ -430,9 +477,9 @@ const particlesInit = async (engine: any) => {
   gap: 10px;
   padding: 8px 12px;
   border-radius: 14px;
-  border: 1px solid rgba(15, 118, 110, 0.2);
-  background: rgba(255, 255, 255, 0.85);
-  color: #0f3323;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #1a5c36;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s ease, border-color 0.2s ease;
@@ -484,19 +531,13 @@ const particlesInit = async (engine: any) => {
   height: 80px;
   display: grid;
   place-items: center;
+  animation: floatSlow 6s ease-in-out infinite;
 }
 
 @media (max-width: 520px) {
   .landing-card {
-    width: calc(100% - 24px);
-    padding: 18px 16px 24px;
-  }
-
-  .language-switcher {
-    right: 50%;
-    top: 8px;
-    transform: translateX(50%);
-    align-items: center;
+    width: calc(100% - 32px);
+    padding: 24px 20px 28px;
   }
 
   .language-toggle {
@@ -504,10 +545,8 @@ const particlesInit = async (engine: any) => {
   }
 
   .language-dropdown {
-    width: min(220px, calc(100vw - 32px));
-    right: 50%;
-    left: auto;
-    transform: translateX(50%);
+    width: 220px;
+    right: 0;
   }
 }
 
@@ -581,8 +620,11 @@ const particlesInit = async (engine: any) => {
 }
 
 .link-list {
-  display: grid;
-  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
   animation: fadeUp 0.8s ease both;
 }
 
@@ -593,14 +635,14 @@ const particlesInit = async (engine: any) => {
   gap: 8px;
   text-decoration: none;
   border-radius: 999px;
-  padding: 10px 14px;
+  padding: 14px 20px;
   color: #ffffff;
-  border: 4px solid;
   position: relative;
   overflow: hidden;
   transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
-  min-height: 50px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+  min-height: 54px;
+  width: calc(100% - 16px);
+  max-width: 440px;
 }
 
 .link-flags-group {
@@ -633,29 +675,33 @@ const particlesInit = async (engine: any) => {
   position: absolute;
   inset: 0;
   background-image: url('https://www.transparenttextures.com/patterns/dust.png');
-  opacity: 0.6;
+  opacity: 0.85;
   mix-blend-mode: color-dodge;
   pointer-events: none;
 }
 
 .landing-link:hover {
-  transform: translateY(-3px);
-  box-shadow: inset 0 0 15px rgba(0,0,0,0.3), 0 6px 12px rgba(0,0,0,0.4);
-  filter: saturate(1.1) brightness(1.1);
+  transform: translateY(-3px) rotate(-0.5deg) scale(1.02);
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.3), 0 8px 16px rgba(40,25,10,0.25);
+  filter: saturate(1.15) brightness(1.1) contrast(1.05);
 }
 
 .landing-link--green {
-  background: linear-gradient(to bottom, #7fcb4a 0%, #469a19 100%);
-  border-color: #a3e87d #418f15 #236104 #a3e87d;
+  background: radial-gradient(ellipse 130% 120% at 50% 50%, #18633F 0%, #2f8e60 45%, #cae872 90%, #fcec88 100%);
+  border: 1px solid #10482d;
+  border-bottom: 6px solid #0a331f;
   color: white;
-  box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.4), 0 3px 6px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.35), 0 6px 12px rgba(0, 0, 0, 0.2);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .landing-link--orange {
-  background: linear-gradient(to bottom, #ffbe00 0%, #ff8e00 100%);
-  border-color: #ffd84d #e08300 #b36900 #ffd84d;
+  background: radial-gradient(ellipse 130% 120% at 50% 50%, #F38E26 0%, #fbab52 45%, #ffd28c 90%, #fcec88 100%);
+  border: 1px solid #d17518;
+  border-bottom: 6px solid #b3610e;
   color: white;
-  box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.4), 0 3px 6px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.35), 0 6px 12px rgba(0, 0, 0, 0.2);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .link-icon,
@@ -699,12 +745,18 @@ const particlesInit = async (engine: any) => {
 
   .landing-card {
     width: min(100%, 500px);
-    padding: 24px 32px;
+    padding: 32px 40px;
+    gap: 20px;
+  }
+
+  .hero-header {
+    margin-bottom: 18px;
   }
 
   .brand-logo {
     width: 120px;
     height: 90px;
+    justify-content: center;  /* Ensure this property is set correctly for mobile */
   }
 
   .divider {
@@ -712,11 +764,11 @@ const particlesInit = async (engine: any) => {
   }
 
   .link-list {
-    gap: 12px;
+    gap: 16px;
   }
 
   .landing-link {
-    padding: 12px 20px;
+    padding: 14px 24px;
   }
 }
 
@@ -746,20 +798,12 @@ const particlesInit = async (engine: any) => {
 
 @media (max-width: 480px) {
   .landing-page {
-    padding: 16px 12px;
+    padding: 24px 16px;
   }
 
   .landing-card {
     width: min(100%, 420px);
-    padding: 20px 16px;
-    border-radius: 26px;
-    box-shadow: 0 20px 46px rgba(0, 0, 0, 0.24);
-  }
-
-  .landing-card::before,
-  .landing-card::after {
-    inset: 12px;
-    border-radius: 20px;
+    padding: 24px 20px;
   }
 
   .brand-logo {
@@ -866,6 +910,26 @@ const particlesInit = async (engine: any) => {
   50% {
     transform: translate(12px, -14px);
   }
+}
+
+@keyframes dustDrift {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(-30px, -30px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes vintageFlicker {
+  0% { opacity: 0.9; }
+  10% { opacity: 0.85; }
+  20% { opacity: 1; }
+  30% { opacity: 0.9; }
+  40% { opacity: 0.8; }
+  50% { opacity: 0.95; }
+  60% { opacity: 0.85; }
+  70% { opacity: 1; }
+  80% { opacity: 0.9; }
+  90% { opacity: 0.8; }
+  100% { opacity: 0.9; }
 }
 
 @media (prefers-reduced-motion: reduce) {
