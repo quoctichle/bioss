@@ -24,40 +24,21 @@ export async function getClient() {
     console.warn('DB connect: Missing connection credentials.');
   }
 
-  // Fetch base credentials provided by the Vercel AWS Lambda execution environment
-  const baseProvider = fromNodeProviderChain();
+  // Lấy credentials trực tiếp từ biến môi trường của Vercel
+  const accessKeyId = process.env.bio_AWS_ACCESS_KEY_ID;
+  const secretAccessKey = process.env.bio_AWS_SECRET_ACCESS_KEY;
+  const sessionToken = process.env.bio_AWS_SESSION_TOKEN; // Có thể có hoặc không
 
-  // AWS SDK credentials wrapper that manually assumes the role Vercel registered
   const provider = async () => {
-    try {
-      const baseCreds = await baseProvider();
-      
-      if (!roleArn) {
-        return baseCreds; // No role to assume, return base directly
-      }
-
-      // Automatically assume the Vercel connection role using STS
-      const sts = new STSClient({ region, credentials: baseCreds });
-      const assumeCmd = new AssumeRoleCommand({
-        RoleArn: roleArn,
-        RoleSessionName: 'VercelAuroraSession',
-        DurationSeconds: 900
-      });
-      
-      const assumed = await sts.send(assumeCmd);
-      if (!assumed.Credentials) {
-         throw new Error("STS returned normal response but no credentials object.");
-      }
-
-      return {
-        accessKeyId: assumed.Credentials.AccessKeyId!,
-        secretAccessKey: assumed.Credentials.SecretAccessKey!,
-        sessionToken: assumed.Credentials.SessionToken,
-        expiration: assumed.Credentials.Expiration
-      };
-    } catch (err: any) {
-      throw new Error(`DEBUG_INFO Provider/STS Error: ${err.message}`);
+    if (!accessKeyId || !secretAccessKey) {
+       throw new Error("Missing bio_AWS_ACCESS_KEY_ID or bio_AWS_SECRET_ACCESS_KEY in env");
     }
+    
+    return {
+      accessKeyId,
+      secretAccessKey,
+      sessionToken
+    };
   };
 
   signer = new Signer({
