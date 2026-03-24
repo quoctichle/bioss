@@ -1,5 +1,5 @@
 import { Signer } from '@aws-sdk/rds-signer';
-import { fromNodeProviderChain } from '@aws-sdk/credential-providers';
+import { fromTokenFile } from '@aws-sdk/credential-provider-web-identity';
 import pg from 'pg';
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -27,8 +27,19 @@ export async function getClient() {
     console.warn('DB connect: Missing connection credentials.');
   }
 
-  // Vercel Serverless/Node custom credential binding
-  const provider = fromNodeProviderChain();
+  const roleArn = process.env.AWS_ROLE_ARN;
+  const webIdentityTokenFile = process.env.AWS_WEB_IDENTITY_TOKEN_FILE;
+
+  if (!roleArn || !webIdentityTokenFile) {
+      throw new Error(`Missing Vercel injected credentials. AWS_ROLE_ARN=${!!roleArn}, AWS_WEB_IDENTITY_TOKEN_FILE=${!!webIdentityTokenFile}`);
+  }
+
+  // Force explicitly loading from Vercel's Web Token File
+  const provider = fromTokenFile({
+      roleArn,
+      webIdentityTokenFile,
+      roleSessionName: "VercelNuxtSession"
+  });
 
   // Explicitly supply the credential provider to the Signer
   signer = new Signer({
