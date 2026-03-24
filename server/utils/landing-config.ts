@@ -1,36 +1,48 @@
-import { mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
+import { mkdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import { createDefaultLandingConfig, normalizeLandingConfig, type LandingConfig } from '../../shared/landing';
+import { getClient, initDb } from './db';
 
-const dataDir = path.join(process.cwd(), 'server', 'data');
-const configPath = path.join(dataDir, 'landing-config.json');
 const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
 
-async function ensureConfigFile() {
-  await mkdir(dataDir, { recursive: true });
-
-  try {
-    await stat(configPath);
-  }
-  catch {
-    await writeFile(configPath, JSON.stringify(createDefaultLandingConfig(), null, 2), 'utf8');
-  }
-}
-
 export async function readLandingConfig(): Promise<LandingConfig> {
-  await ensureConfigFile();
-  const raw = await readFile(configPath, 'utf8');
-  const parsed = JSON.parse(raw);
-
-  return normalizeLandingConfig(parsed);
+  try {
+    await initDb();
+    const client = await getClient();
+    const queryResult = await client.query('SELECT config FROM site_config WHERE id = 1');
+    
+    if (queryResult.rows.length === 0) {
+      const defaultConfig = createDefaultLandingConfig();
+      await client.query('INSERT INTO site_config (id, config) VALUES (1, $1)', [defaultConfig]);
+      return normalizeLandingConfig(defaultConfig);
+    }
+    
+    return normalizeLandingConfig(queryResult.rows[0].config);
+  } catch (error) {
+    console.error('Error reading landing config from Database, formatting to default fallback.', error);
+    // Fallback if DB not fully set yet
+    return normalizeLandingConfig(createDefaultLandingConfig());
+  }
 }
 
 export async function writeLandingConfig(config: unknown): Promise<LandingConfig> {
   const normalized = normalizeLandingConfig(config);
 
-  await ensureConfigFile();
-  await writeFile(configPath, JSON.stringify(normalized, null, 2), 'utf8');
+  try {
+    await initDb();
+    const client = await getClient();
+    const queryResult = await client.query('SELECT id FROM site_config WHERE id = 1');
+
+    if (queryResult.rows.length === 0) {
+      await client.query('INSERT INTO site_config (id, config) VALUES (1, $1)', [normalized]);
+    } else {
+      await client.query('UPDATE site_config SET config = $1 WHERE id = 1', [normalized]);
+    }
+  } catch (error) {
+    console.error('Error writing landing config to Database:', error);
+    throw createError({ statusCode: 500, statusMessage: 'Lỗi khi lưu cấu hình vào cơ sở dữ liệu.' });
+  }
 
   return normalized;
 }
