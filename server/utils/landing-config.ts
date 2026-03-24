@@ -117,6 +117,11 @@ export async function saveLogoDataUrl(dataUrl: unknown, previousLogoUrl?: string
     throw createError({ statusCode: 400, statusMessage: 'Invalid data.' });
   }
 
+  if (!dataUrl.startsWith('data:')) {
+    // treat as external link, just store and return it
+    return dataUrl;
+  }
+
   const match = dataUrl.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/);
   if (!match) {
     throw createError({ statusCode: 400, statusMessage: 'Logo must be PNG, JPG, WEBP, or SVG base64.' });
@@ -151,6 +156,10 @@ export async function saveLogoDataUrl(dataUrl: unknown, previousLogoUrl?: string
 export async function saveFlagDataUrl(dataUrl: unknown, previousFileUrl?: string): Promise<string> {
   if (typeof dataUrl !== 'string') {
     throw createError({ statusCode: 400, statusMessage: 'Invalid data.' });
+  }
+
+  if (!dataUrl.startsWith('data:')) {
+    return dataUrl;
   }
 
   const match = dataUrl.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/);
