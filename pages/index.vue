@@ -641,10 +641,10 @@ const particlesInit = async (engine: any) => {
   min-height: 54px;
   width: calc(100% - 16px);
   max-width: 440px;
-  background: linear-gradient(135deg, #37b8b1 0%, #83c7ff 42%, #f497cd 70%, #fcbf82 100%);
+  background: linear-gradient(135deg, #00693c 0%, #0b7b47 35%, #e9922a 70%, #fffafa 100%);
   box-shadow:
-    inset 0 0 28px rgba(255, 255, 255, 0.4),
-    0 18px 32px rgba(22, 64, 54, 0.35);
+    inset 0 0 22px rgba(255, 255, 255, 0.45),
+    0 20px 34px rgba(0, 72, 46, 0.45);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
@@ -675,8 +675,8 @@ const particlesInit = async (engine: any) => {
 
 .landing-link:hover {
   transform: translateY(-3px) rotate(-0.5deg) scale(1.02);
-  box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.25), 0 16px 28px rgba(20, 60, 50, 0.35);
-  filter: saturate(1.1) brightness(1.08);
+  box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.3), 0 18px 32px rgba(0, 74, 48, 0.55);
+  filter: saturate(1.05) brightness(1.12);
 }
 
 .landing-link--green {
