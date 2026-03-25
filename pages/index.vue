@@ -480,32 +480,24 @@ const particlesInit = async (engine: any) => {
   border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
-.language-option {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
-  border-radius: 14px;
-  border: 1px solid transparent;
-  background: transparent;
-  color: #1a5c36;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
+.landing-link {
+  background: linear-gradient(135deg, #18633F 0%, #20437C 30%, #E1649F 65%, #F38E26 100%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-bottom: 5px solid rgba(255, 255, 255, 0.4);
+  box-shadow:
+    inset 0 0 20px rgba(255, 255, 255, 0.4),
+    0 10px 22px rgba(0, 0, 0, 0.2);
+  text-shadow: none;
 }
-
-.language-option:hover,
-.language-option:focus-visible {
-  background: rgba(34, 197, 94, 0.08);
   border-color: rgba(34, 197, 94, 0.4);
 }
-
-.language-option--active {
+  border-color: rgba(22, 61, 36, 0.5);
+  border-bottom-color: rgba(15, 90, 55, 0.75);
   background: rgba(34, 197, 94, 0.18);
   border-color: rgba(34, 197, 94, 0.5);
   color: #0b462f;
-}
-
+  border-color: rgba(227, 126, 34, 0.5);
+  border-bottom-color: rgba(178, 51, 9, 0.75);
 .language-option:hover,
 .language-option:focus-visible {
   background: rgba(34, 197, 94, 0.08);
