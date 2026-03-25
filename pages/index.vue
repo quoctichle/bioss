@@ -288,14 +288,11 @@ const particlesInit = async (engine: any) => {
   mix-blend-mode: screen;
 }
 
-.landing-page::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.55), transparent 45%),
-    radial-gradient(circle at 80% 0%, rgba(255, 255, 255, 0.45), transparent 55%);
-  pointer-events: none;
-  z-index: 90;
+:global(body) {
+  margin: 0;
+  font-family: var(--app-font-family);
+  background: linear-gradient(180deg, #fffafa 0%, #e9922a 55%, #00693c 100%);
+  color: #0b3b2b;
 }
 
 .landing-page::after {
@@ -305,13 +302,6 @@ const particlesInit = async (engine: any) => {
   background: radial-gradient(circle at 50% 100%, rgba(255, 255, 255, 0.6), transparent 60%);
   pointer-events: none;
   z-index: -1;
-}
-
-:global(body) {
-  margin: 0;
-  font-family: var(--app-font-family);
-  background: linear-gradient(180deg, #fffafa 0%, #e9922a 55%, #00693c 100%);
-  color: #0b3b2b;
 }
 
 .landing-page {
