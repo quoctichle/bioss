@@ -344,20 +344,19 @@ const particlesInit = async (engine: any) => {
   flex-direction: column;
   gap: 20px;
   text-align: center;
-  background: linear-gradient(180deg, #fffefa 0%, #fff8f1 35%, #ffece0 60%, #ffe5d6 100%);
+  background: #fffdf8;
   border-radius: 36px;
   border: 1px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 28px 60px rgba(6, 94, 58, 0.2), inset 0 0 40px rgba(255, 255, 255, 0.7);
+  box-shadow: 0 32px 68px rgba(6, 94, 58, 0.25);
 }
 
 .landing-card::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0) 55%),
-    radial-gradient(circle at 80% 0%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 45%);
-  opacity: 0.6;
-  mix-blend-mode: screen;
+  background: radial-gradient(circle at 50% -20%, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0) 60%);
+  opacity: 0.45;
+  mix-blend-mode: lighten;
   pointer-events: none;
   border-radius: 36px;
   z-index: -1;
