@@ -310,8 +310,8 @@ const particlesInit = async (engine: any) => {
 :global(body) {
   margin: 0;
   font-family: var(--app-font-family);
-  background: linear-gradient(180deg, #ffffff 0%, #e5fff3 55%, #c6f9e5 100%);
-  color: #13462b;
+  background: linear-gradient(180deg, #fffafa 0%, #e9922a 55%, #00693c 100%);
+  color: #0b3b2b;
 }
 
 .landing-page {
@@ -344,11 +344,10 @@ const particlesInit = async (engine: any) => {
   flex-direction: column;
   gap: 20px;
   text-align: center;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background: rgba(255, 250, 250, 0.95);
   border-radius: 36px;
-  box-shadow: 0 10px 40px rgba(80, 50, 20, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 105, 60, 0.2);
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.15);
 }
 
 .landing-card::before {
@@ -471,16 +470,16 @@ const particlesInit = async (engine: any) => {
   border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
- .landing-link {
+.landing-link {
   background-image:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0)),
-    linear-gradient(135deg, #18633F 0%, #20437C 30%, #E1649F 65%, #F38E26 100%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0)),
+    linear-gradient(135deg, #00693c 0%, #1a8b50 35%, #e9922a 70%, #fffafa 100%);
   border: none;
-  border-bottom: 5px solid rgba(255, 255, 255, 0.6);
+  border-bottom: 6px solid rgba(233, 146, 42, 0.8);
   box-shadow:
-    0 20px 30px rgba(20, 40, 22, 0.35),
-    inset 0 0 18px rgba(255, 255, 255, 0.25);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    0 22px 32px rgba(0, 0, 0, 0.25),
+    inset 0 0 18px rgba(255, 255, 255, 0.35);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
   position: relative;
   overflow: hidden;
 }
