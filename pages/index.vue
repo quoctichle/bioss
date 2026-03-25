@@ -350,17 +350,6 @@ const particlesInit = async (engine: any) => {
   box-shadow: 0 32px 68px rgba(6, 94, 58, 0.25);
 }
 
-.landing-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% -20%, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0) 60%);
-  opacity: 0.45;
-  mix-blend-mode: lighten;
-  pointer-events: none;
-  border-radius: 36px;
-  z-index: -1;
-}
 
 .hero-header {
   display: flex;
