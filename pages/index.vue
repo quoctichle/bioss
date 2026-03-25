@@ -417,31 +417,27 @@ const particlesInit = async (engine: any) => {
   box-shadow: 0 8px 20px rgba(15, 118, 110, 0.25);
 }
 
-.language-flag {
-  font-size: 1.3rem;
-  line-height: 1;
-}
-.language-flag img {
-  width: 1.6rem;
-  height: 1.6rem;
+.landing-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
   border-radius: 999px;
-  object-fit: cover;
+  padding: 14px 20px;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
+  min-height: 54px;
+  width: calc(100% - 16px);
+  max-width: 440px;
+  background: linear-gradient(135deg, #00693c 0%, #0b7b47 35%, #e9922a 70%, #fffafa 100%);
+  box-shadow:
+    inset 0 0 22px rgba(255, 255, 255, 0.45),
+    0 20px 34px rgba(0, 72, 46, 0.45);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
-
-.language-label {
-  opacity: 0.9;
-  font-size: 0.95rem;
-}
-
-.language-chevron {
-  display: inline-flex;
-  font-size: 0.9rem;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
   padding: 0;
   margin: -1px;
   overflow: hidden;
@@ -538,7 +534,9 @@ const particlesInit = async (engine: any) => {
 
   .language-toggle {
     padding: 8px 14px;
-  }
+  background-image:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0)),
+    linear-gradient(135deg, #1b7b47 0%, #34a86e 40%, #f7b444 70%, #f4d486 100%);
 
   .language-dropdown {
     width: 220px;
@@ -551,6 +549,34 @@ const particlesInit = async (engine: any) => {
   max-height: 100%;
   object-fit: contain;
   filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.5));
+
+.landing-link::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: inherit;
+  background: radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.35), transparent 55%),
+    radial-gradient(circle at 80% 40%, rgba(255, 255, 255, 0.2), transparent 48%),
+    radial-gradient(circle at 50% 70%, rgba(255, 255, 255, 0.25), transparent 40%);
+  opacity: 0.85;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  animation: telecomPulse 6s ease-in-out infinite;
+}
+
+.landing-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image:
+    linear-gradient(60deg, rgba(255, 255, 255, 0.08) 0%, transparent 45%),
+    linear-gradient(-60deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  mix-blend-mode: screen;
+  opacity: 0.45;
+  pointer-events: none;
+  animation: telecomSweep 4s linear infinite;
+}
 }
 
 .brand-logo--fallback {
@@ -854,6 +880,33 @@ const particlesInit = async (engine: any) => {
 }
 
 @keyframes fadeUp {
+
+  @keyframes telecomPulse {
+    0% {
+      transform: scale(0.98);
+      opacity: 0.8;
+    }
+    50% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(0.98);
+      opacity: 0.8;
+    }
+  }
+
+  @keyframes telecomSweep {
+    0% {
+      transform: translateX(-25%) translateY(-5%);
+    }
+    50% {
+      transform: translateX(15%) translateY(5%);
+    }
+    100% {
+      transform: translateX(-25%) translateY(-5%);
+    }
+  }
   from {
     opacity: 0;
     transform: translateY(16px);
