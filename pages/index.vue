@@ -344,10 +344,10 @@ const particlesInit = async (engine: any) => {
   flex-direction: column;
   gap: 20px;
   text-align: center;
-  background: rgba(255, 250, 250, 0.95);
+  background: linear-gradient(180deg, #fffafa 0%, #ffe5f3 40%, #ffe0a5 80%);
   border-radius: 36px;
-  border: 1px solid rgba(0, 105, 60, 0.2);
-  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 20px 50px rgba(255, 183, 104, 0.25), inset 0 0 40px rgba(255, 255, 255, 0.6);
 }
 
 .landing-card::before {
@@ -472,8 +472,8 @@ const particlesInit = async (engine: any) => {
 
 .landing-link {
   background-image:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0)),
-    linear-gradient(135deg, #00693c 0%, #1a8b50 35%, #e9922a 70%, #fffafa 100%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0)),
+    linear-gradient(135deg, #1b7b47 0%, #34a86e 40%, #f7b444 70%, #f4d486 100%);
   border: none;
   border-bottom: 6px solid rgba(233, 146, 42, 0.8);
   box-shadow:
