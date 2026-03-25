@@ -288,13 +288,29 @@ const particlesInit = async (engine: any) => {
   mix-blend-mode: screen;
 }
 
+.landing-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.55), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(255, 255, 255, 0.45), transparent 55%);
+  pointer-events: none;
+  z-index: 90;
+}
+
+.landing-page::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 100%, rgba(255, 255, 255, 0.6), transparent 60%);
+  pointer-events: none;
+  z-index: -1;
+}
+
 :global(body) {
   margin: 0;
   font-family: var(--app-font-family);
-  background: 
-    radial-gradient(circle at 50% 45%, #ffffff 0%, rgba(255,255,255,0.8) 25%, rgba(255,255,255,0) 65%),
-    linear-gradient(180deg, #ffd88a 0%, #8bc49c 50%, #2f6b43 100%);
-  background-attachment: fixed;
+  background: linear-gradient(180deg, #ffffff 0%, #e5fff3 55%, #c6f9e5 100%);
   color: #13462b;
 }
 
@@ -318,31 +334,6 @@ const particlesInit = async (engine: any) => {
   z-index: 100;
 }
 
-.landing-page::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: 
-    radial-gradient(circle at 50% 50%, transparent 30%, rgba(60, 35, 10, 0.4) 150%),
-    repeating-linear-gradient(0deg, rgba(0,0,0,0.04), rgba(0,0,0,0.04) 1px, transparent 1px, transparent 3px);
-  pointer-events: none;
-  z-index: 90;
-  mix-blend-mode: multiply;
-  animation: vintageFlicker 8s infinite;
-}
-
-.landing-page::after {
-  content: '';
-  position: absolute;
-  inset: -100% -100%;
-  background-image: url('https://www.transparenttextures.com/patterns/dust.png');
-  opacity: 0.85;
-  mix-blend-mode: color-dodge;
-  pointer-events: none;
-  z-index: -3;
-  animation: dustDrift 40s linear infinite;
-}
-
 .landing-card {
   width: min(100%, 460px);
   margin: 0 auto;
@@ -353,9 +344,9 @@ const particlesInit = async (engine: any) => {
   flex-direction: column;
   gap: 20px;
   text-align: center;
-  background: rgba(255, 248, 235, 0.25);
-  backdrop-filter: blur(12px) sepia(25%);
-  -webkit-backdrop-filter: blur(12px) sepia(25%);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   border-radius: 36px;
   box-shadow: 0 10px 40px rgba(80, 50, 20, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
 }
