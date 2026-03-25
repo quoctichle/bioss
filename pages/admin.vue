@@ -469,40 +469,52 @@ useSeoMeta({
                 :key="language.code"
                 class="language-pill-slot"
               >
-                <button
-                  type="button"
-                  class="language-pill"
-                  :class="{ 'language-pill--active': language.code === activeLanguage }"
-                  @click="setActiveLanguage(language.code)"
-                  :aria-pressed="language.code === activeLanguage"
-                >
-                  <span class="pill-flag">
-                    <img
-                      v-if="isUploadedLanguageFlag(form.languageFlags[language.code])"
-                      :src="form.languageFlags[language.code]"
-                      alt=""
-                    />
-                    <span v-else>{{ form.languageFlags[language.code] || language.flag }}</span>
-                  </span>
-                  <span class="pill-label">{{ language.label }}</span>
-                </button>
-                <label
-                  :for="`language-flag-upload-${language.code}`"
-                  class="language-pill-upload"
-                  :class="{ 'language-pill-upload--loading': languageUploading[language.code] }"
-                  :aria-busy="languageUploading[language.code]"
-                  :title="`Tải cờ ${language.label}`"
-                >
-                  <span class="upload-icon">{{ languageUploading[language.code] ? '⌛' : '⬆️' }}</span>
-                  <span class="upload-text">Cờ</span>
+                <div class="language-pill-actions">
+                  <button
+                    type="button"
+                    class="language-pill"
+                    :class="{ 'language-pill--active': language.code === activeLanguage }"
+                    @click="setActiveLanguage(language.code)"
+                    :aria-pressed="language.code === activeLanguage"
+                  >
+                    <span class="pill-flag">
+                      <img
+                        v-if="isUploadedLanguageFlag(form.languageFlags[language.code])"
+                        :src="form.languageFlags[language.code]"
+                        alt=""
+                      />
+                      <span v-else>{{ form.languageFlags[language.code] || language.flag }}</span>
+                    </span>
+                    <span class="pill-label">{{ language.label }}</span>
+                  </button>
+                  <label
+                    :for="`language-flag-upload-${language.code}`"
+                    class="language-pill-upload"
+                    :class="{ 'language-pill-upload--loading': languageUploading[language.code] }"
+                    :aria-busy="languageUploading[language.code]"
+                    :title="`Tải cờ ${language.label}`"
+                  >
+                    <span class="upload-icon">{{ languageUploading[language.code] ? '⌛' : '⬆️' }}</span>
+                    <span class="upload-text">Cờ</span>
+                  </label>
+                  <input
+                    :id="`language-flag-upload-${language.code}`"
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                    class="sr-only"
+                    @change="e => uploadLanguageFlag(language.code, e)"
+                  />
+                </div>
+                <label class="language-flag-field">
+                  <span class="language-flag-label">Đường dẫn hoặc emoji</span>
+                  <input
+                    v-model="form.languageFlags[language.code]"
+                    type="text"
+                    maxlength="200"
+                    class="language-flag-input"
+                    placeholder="Ví dụ: 🇻🇳 hoặc https://..."
+                  />
                 </label>
-                <input
-                  :id="`language-flag-upload-${language.code}`"
-                  type="file"
-                  accept="image/png,image/jpeg,image/webp,image/svg+xml"
-                  class="sr-only"
-                  @change="e => uploadLanguageFlag(language.code, e)"
-                />
               </div>
             </div>
           </div>
@@ -730,14 +742,52 @@ useSeoMeta({
 
 .language-pill-group {
   display: flex;
-  gap: 8px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .language-pill-slot {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 180px;
+}
+
+.language-pill-actions {
+  display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
+}
+
+.language-flag-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.language-flag-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #4f6356;
+}
+
+.language-flag-input {
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 12px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.85);
+  color: #1f2c1f;
+}
+
+.language-flag-input:focus {
+  outline: 2px solid #22c55e;
+  outline-offset: 2px;
 }
 
 .language-pill {
