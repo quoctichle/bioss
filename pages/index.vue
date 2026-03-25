@@ -695,26 +695,22 @@ const particlesInit = async (engine: any) => {
   filter: saturate(1.15) brightness(1.1) contrast(1.05);
 }
 
-.landing-link--green {
-  background: linear-gradient(135deg, #6fde96 0%, #419c66 55%, #1e5c36 100%);
-  border: 1px solid rgba(0, 80, 40, 0.7);
-  border-bottom: 6px solid rgba(19, 76, 40, 0.9);
-  color: white;
+.landing-link {
+  background: linear-gradient(130deg, #18633F 0%, #20437C 28%, #E1649F 62%, #F38E26 100%);
   box-shadow:
-    inset 0 0 30px rgba(255, 255, 255, 0.4),
-    0 12px 24px rgba(21, 46, 24, 0.35);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    inset 0 0 35px rgba(255, 255, 255, 0.35),
+    0 12px 24px rgba(21, 46, 24, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.landing-link--green {
+  border: 1px solid rgba(8, 29, 18, 0.6);
+  border-bottom: 6px solid rgba(13, 49, 26, 0.85);
 }
 
 .landing-link--orange {
-  background: linear-gradient(135deg, #ffb347 0%, #ff8a3d 55%, #c84b14 100%);
-  border: 1px solid rgba(190, 83, 16, 0.7);
-  border-bottom: 6px solid rgba(150, 45, 5, 0.9);
-  color: white;
-  box-shadow:
-    inset 0 0 20px rgba(255, 255, 255, 0.35),
-    0 12px 24px rgba(153, 53, 6, 0.35);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(153, 67, 9, 0.7);
+  border-bottom: 6px solid rgba(122, 35, 7, 0.9);
 }
 
 .link-icon,
