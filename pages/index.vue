@@ -489,15 +489,16 @@ const particlesInit = async (engine: any) => {
     0 10px 22px rgba(0, 0, 0, 0.2);
   text-shadow: none;
 }
-  border-color: rgba(34, 197, 94, 0.4);
-}
+
+.landing-link--green {
   border-color: rgba(22, 61, 36, 0.5);
   border-bottom-color: rgba(15, 90, 55, 0.75);
-  background: rgba(34, 197, 94, 0.18);
-  border-color: rgba(34, 197, 94, 0.5);
-  color: #0b462f;
+}
+
+.landing-link--orange {
   border-color: rgba(227, 126, 34, 0.5);
   border-bottom-color: rgba(178, 51, 9, 0.75);
+}
 .language-option:hover,
 .language-option:focus-visible {
   background: rgba(34, 197, 94, 0.08);
