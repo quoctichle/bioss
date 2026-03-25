@@ -354,9 +354,10 @@ const particlesInit = async (engine: any) => {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url('https://www.transparenttextures.com/patterns/dust.png');
+  background: radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0) 55%),
+    radial-gradient(circle at 80% 0%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 45%);
   opacity: 0.6;
-  mix-blend-mode: color-dodge;
+  mix-blend-mode: screen;
   pointer-events: none;
   border-radius: 36px;
   z-index: -1;
