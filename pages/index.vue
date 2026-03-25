@@ -495,13 +495,6 @@ const particlesInit = async (engine: any) => {
   mix-blend-mode: screen;
 }
 
-.landing-link--green {
-  border-bottom-color: rgba(15, 90, 55, 0.85);
-}
-
-.landing-link--orange {
-  border-bottom-color: rgba(178, 51, 9, 0.85);
-}
 .language-option:hover,
 .language-option:focus-visible {
   background: rgba(34, 197, 94, 0.08);
@@ -648,55 +641,42 @@ const particlesInit = async (engine: any) => {
   min-height: 54px;
   width: calc(100% - 16px);
   max-width: 440px;
+  background: linear-gradient(135deg, #37b8b1 0%, #83c7ff 42%, #f497cd 70%, #fcbf82 100%);
+  box-shadow:
+    inset 0 0 28px rgba(255, 255, 255, 0.4),
+    0 18px 32px rgba(22, 64, 54, 0.35);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
 .link-flags-group {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-  }
-
-  .link-flag {
-    font-size: 1.3rem;
-    line-height: 1;
-  }
-
-  .link-flag-img {
-    width: 30px;
-    height: 22px;
-    border-radius: 4px;
-    object-fit: cover;
-  }
-
-  .link-separator {
-    opacity: 0.6;
-    margin: 0 3px;
-    font-size: 1.1rem;
-  font-weight: 300;
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }
 
-.landing-link::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: url('https://www.transparenttextures.com/patterns/dust.png');
-  opacity: 0.85;
-  mix-blend-mode: color-dodge;
-  pointer-events: none;
+.link-flag {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.link-flag-img {
+  width: 30px;
+  height: 22px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.link-separator {
+  opacity: 0.6;
+  margin: 0 3px;
+  font-size: 1.1rem;
+  font-weight: 300;
 }
 
 .landing-link:hover {
   transform: translateY(-3px) rotate(-0.5deg) scale(1.02);
-  box-shadow: inset 0 0 15px rgba(0,0,0,0.3), 0 8px 16px rgba(40,25,10,0.25);
-  filter: saturate(1.15) brightness(1.1) contrast(1.05);
-}
-
-.landing-link {
-  background: linear-gradient(130deg, #18633F 0%, #20437C 28%, #E1649F 62%, #F38E26 100%);
-  box-shadow:
-    inset 0 0 35px rgba(255, 255, 255, 0.35),
-    0 12px 24px rgba(21, 46, 24, 0.3);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.25), 0 16px 28px rgba(20, 60, 50, 0.35);
+  filter: saturate(1.1) brightness(1.08);
 }
 
 .landing-link--green {
@@ -948,7 +928,7 @@ const particlesInit = async (engine: any) => {
   }
 
   .landing-link,
-  .landing-link::before {
+  .landing-link::after {
     transition: none;
   }
 }
