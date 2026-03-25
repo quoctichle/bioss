@@ -471,24 +471,37 @@ const particlesInit = async (engine: any) => {
   border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
-.landing-link {
-  background: linear-gradient(135deg, #18633F 0%, #20437C 30%, #E1649F 65%, #F38E26 100%);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  border-bottom: 5px solid rgba(255, 255, 255, 0.4);
+ .landing-link {
+  background-image:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0)),
+    linear-gradient(135deg, #18633F 0%, #20437C 30%, #E1649F 65%, #F38E26 100%);
+  border: none;
+  border-bottom: 5px solid rgba(255, 255, 255, 0.6);
   box-shadow:
-    inset 0 0 20px rgba(255, 255, 255, 0.4),
-    0 10px 22px rgba(0, 0, 0, 0.2);
-  text-shadow: none;
+    0 20px 30px rgba(20, 40, 22, 0.35),
+    inset 0 0 18px rgba(255, 255, 255, 0.25);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.landing-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 30% -20%, rgba(255, 255, 255, 0.4), transparent 40%);
+  opacity: 0.8;
+  pointer-events: none;
+  mix-blend-mode: screen;
 }
 
 .landing-link--green {
-  border-color: rgba(22, 61, 36, 0.5);
-  border-bottom-color: rgba(15, 90, 55, 0.75);
+  border-bottom-color: rgba(15, 90, 55, 0.85);
 }
 
 .landing-link--orange {
-  border-color: rgba(227, 126, 34, 0.5);
-  border-bottom-color: rgba(178, 51, 9, 0.75);
+  border-bottom-color: rgba(178, 51, 9, 0.85);
 }
 .language-option:hover,
 .language-option:focus-visible {
