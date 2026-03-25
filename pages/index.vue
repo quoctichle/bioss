@@ -20,6 +20,8 @@ const heroSubtitle = computed(() => activeTranslation.value?.orangeSubtitle ?? c
 const activeLanguageOption = computed(() => languageMenu.find((language) => language.code === currentLanguage.value));
 const activeLanguageLabel = computed(() => activeLanguageOption.value?.label ?? '');
 const activeLanguageFlag = computed(() => getLanguageFlag(currentLanguage.value));
+const fallbackLogoUrl = createDefaultLandingConfig().logoUrl;
+const shareImageUrl = computed(() => config.value.logoUrl || fallbackLogoUrl);
 
 function isExternal(url: string) {
   return /^(https?:|mailto:|tel:)/i.test(url);
@@ -59,6 +61,13 @@ useSeoMeta({
   title: 'Sunshine Ecosystem',
   description: 'Landing page user cho he sinh thai Sunshine',
 });
+
+useHead(() => ({
+  meta: [
+    { property: 'og:image', content: shareImageUrl.value },
+    { name: 'twitter:image', content: shareImageUrl.value },
+  ],
+}));
 
 const particlesOptionsPage = ref<ISourceOptions>({
   background: {
