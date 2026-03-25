@@ -340,6 +340,25 @@ const particlesInit = async (engine: any) => {
   box-shadow: 0 32px 68px rgba(6, 94, 58, 0.25);
 }
 
+.landing-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image:
+    radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.8), transparent 35%),
+    radial-gradient(circle at 70% 15%, rgba(255, 255, 255, 0.6), transparent 36%),
+    radial-gradient(circle at 40% 65%, rgba(255, 255, 255, 0.5), transparent 45%),
+    linear-gradient(120deg, rgba(228, 170, 97, 0.22), rgba(228, 170, 97, 0) 55%),
+    linear-gradient(30deg, rgba(118, 162, 137, 0.25), rgba(118, 162, 137, 0) 50%),
+    linear-gradient(150deg, rgba(200, 214, 226, 0.35) 0, transparent 40%);
+  background-size: 100% 100%;
+  mix-blend-mode: screen;
+  opacity: 0.65;
+  pointer-events: none;
+  z-index: 0;
+}
+
 
 .hero-header {
   display: flex;
