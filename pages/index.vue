@@ -696,21 +696,25 @@ const particlesInit = async (engine: any) => {
 }
 
 .landing-link--green {
-  background: radial-gradient(ellipse 130% 120% at 50% 50%, #18633F 0%, #2f8e60 45%, #cae872 90%, #fcec88 100%);
-  border: 1px solid #10482d;
-  border-bottom: 6px solid #0a331f;
+  background: linear-gradient(135deg, #6fde96 0%, #419c66 55%, #1e5c36 100%);
+  border: 1px solid rgba(0, 80, 40, 0.7);
+  border-bottom: 6px solid rgba(19, 76, 40, 0.9);
   color: white;
-  box-shadow: inset 0 2px 4px rgba(255,255,255,0.35), 0 6px 12px rgba(0, 0, 0, 0.2);
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+  box-shadow:
+    inset 0 0 30px rgba(255, 255, 255, 0.4),
+    0 12px 24px rgba(21, 46, 24, 0.35);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
 .landing-link--orange {
-  background: radial-gradient(ellipse 130% 120% at 50% 50%, #F38E26 0%, #fbab52 45%, #ffd28c 90%, #fcec88 100%);
-  border: 1px solid #d17518;
-  border-bottom: 6px solid #b3610e;
+  background: linear-gradient(135deg, #ffb347 0%, #ff8a3d 55%, #c84b14 100%);
+  border: 1px solid rgba(190, 83, 16, 0.7);
+  border-bottom: 6px solid rgba(150, 45, 5, 0.9);
   color: white;
-  box-shadow: inset 0 2px 4px rgba(255,255,255,0.35), 0 6px 12px rgba(0, 0, 0, 0.2);
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+  box-shadow:
+    inset 0 0 20px rgba(255, 255, 255, 0.35),
+    0 12px 24px rgba(153, 53, 6, 0.35);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
 .link-icon,
